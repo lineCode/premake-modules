@@ -11,7 +11,7 @@ function cmake.tprint (tbl, indent)
   for k, v in pairs(tbl) do
     formatting = string.rep("  ", indent) .. k .. ": "
     if type(v) == "table" then
-      print(formatting)
+      print(table.tostring(v))
       -- tprint(v, indent+1)
     else
       print(formatting .. tostring(v))
@@ -61,6 +61,16 @@ end
 
 function cmake.cleanTarget(prj)
   -- TODO..
+end
+
+function cmake.linkmodules(modules, withPlatform)
+  local target_libs = {}
+  local plat = ''
+  if withPlatform then plat = '_%{cfg.platform}' end
+  for k, v in pairs(modules) do
+    table.insert(target_libs, v..'_%{cfg.buildcfg}'..plat)
+  end
+  links(target_libs)
 end
 
 include('_preload.lua')

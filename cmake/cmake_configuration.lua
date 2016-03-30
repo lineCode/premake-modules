@@ -99,6 +99,22 @@ function m.includedirs(cfg)
   end
 end
 
+function m.targetprops(cfg)
+  local targetname = cmake.targetname(cfg)
+  local platfm = ''
+  if cfg.platform then platfm='_'..cfg.platform end
+
+  if cfg.targetdir and cfg.filename then
+    _p(1,'set_target_properties( %s ', targetname)
+    _p(2,'PROPERTIES')
+    _p(2,'ARCHIVE_OUTPUT_DIRECTORY "%s"', cfg.targetdir)
+    _p(2,'LIBRARY_OUTPUT_DIRECTORY "%s"', cfg.targetdir)
+    _p(2,'RUNTIME_OUTPUT_DIRECTORY "%s"', cfg.targetdir)
+    _p(2,'OUTPUT_NAME  "%s"', cfg.filename..platfm)
+    _p(1,')')
+  end
+end
+
 function m.elements.generate(cfg)
   return {
     m.flags,
@@ -107,7 +123,8 @@ function m.elements.generate(cfg)
     m.libdirs,
     m.files,
     m.target,
-    m.links
+    m.targetprops,
+    m.links,
   }
 end
 
