@@ -28,16 +28,25 @@ function m.outdir ()
   return path.getabsolute( outputDir )
 end
 
+-- Get Project output directory
 function m.location ()
   return path.getabsolute( outputDir..'/'.._ACTION )
 end
 
-function m.binlocation ()
-  return path.getabsolute(outputDir..'/'.._ACTION..'/bin/%{cfg.buildcfg}')
+-- Get executable binary output directory
+-- param withPlatform : If contains any platform in this workspace or project
+function m.binlocation (withPlatform)
+  local platfm = ''
+  if withPlatform then platfm = '/%{cfg.platform}' end
+  return path.getabsolute(outputDir..'/'.._ACTION..'/bin/%{cfg.buildcfg}'..platfm)
 end
 
-function m.liblocation ()
-  return path.getabsolute(outputDir..'/'.._ACTION..'/lib/%{cfg.buildcfg}')
+-- Get library binary output directory
+-- param withPlatform : If contains any platform in this workspace or project
+function m.liblocation (withPlatform)
+  local platfm = ''
+  if withPlatform then platfm = '/%{cfg.platform}' end
+  return path.getabsolute(outputDir..'/'.._ACTION..'/lib/%{cfg.buildcfg}'..platfm)
 end
 
 return m;
