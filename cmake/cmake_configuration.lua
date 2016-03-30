@@ -9,15 +9,26 @@ m.elements = {}
 
 -- Flags
 function m.flags(cfg)
+  local cmakeflags = '-Wall'
+  local buildType = 'RelWithDebInfo'
   if cfg.flags and #cfg.flags > 0 then
     for _, flag in ipairs(cfg.flags) do
       if flag == 'C++11' then
         _p(1, 'set(CMAKE_CXX_STANDARD 11)')
       elseif flag == 'C++14' then
         _p(1, 'set(CMAKE_CXX_STANDARD 14)')
+      elseif flag == 'Symbols' then
+        buildType = 'DebugFull'
+      elseif flag == 'FatalWarnings' or flag == 'FatalCompileWarnings' then
+        cmakeflags = cmakeflags..' -Werror'
+      elseif flag == 'Unicode' then
+        _p(1,'add_definitions(-DUNICODE -D_UNICODE)')
       end
     end
   end
+  _p(1, 'set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} %s")', cmakeflags)
+  _p(1, 'set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} %s")', cmakeflags)
+  _p(1, 'set(CMAKE_BUILD_TYPE %s)', buildType)
 end
 
 -- Add files
